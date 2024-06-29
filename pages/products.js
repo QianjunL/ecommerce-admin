@@ -13,10 +13,15 @@ export default function Products() {
     useEffect(() => {
         setIsLoading(true);
         axios.get('/api/products').then(response => {
+            console.log('product', response.data)
             setProducts(response.data);
             setIsLoading(false);
-        })
-    }, [])
+        });
+
+        axios.get('/api/categories').then(response => {
+            setCategories(response.data);
+        });
+    }, []);
 
     return (
         <Layout>
@@ -44,19 +49,25 @@ export default function Products() {
                     </tr>
                     )}
 
-                    {products.map(product => (
+                {products.map(product => {
+                    const foundCategory = categories.find(cat => cat._id === product.category);
+                    const categoryName = foundCategory ? foundCategory.name : 'Uncategorized';
+                    return (
                         <tr key={product._id}>
                             <td>{product.title}</td>
-                    <td>
-                            {/* todo */}
-                            {categories.length && categories.map(category => (
-                                    <tr key={category._id}>
-                                        <td>{category.name}</td>
-                                    </tr>
-                                    
-                                ))}
+                            <td>{categoryName}</td>
+                            <td>
+                            {product.properties && Object.keys(product.properties).length > 0 ? (
+                                Object.entries(product.properties).map(([key, value]) => (
+                                    <div key={key}>
+                                        <strong>{key}: </strong>{value}
+                                    </div>
+                                ))
+                            ) : (
+                                <div>No properties</div>
+                            )}
                                 </td>
-                                    <td></td>
+
                                     <td>
                                         <Link className="btn-default" href={'/products/edit/'+product._id}>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
@@ -72,7 +83,8 @@ export default function Products() {
                                             </Link>
                                     </td>
                         </tr>
-                    ))}
+                    )
+                        })}
                 </tbody>
             </table>
         </Layout>

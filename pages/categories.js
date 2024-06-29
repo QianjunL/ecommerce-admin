@@ -138,9 +138,11 @@ function Categories ({swal}) {
             value={parentCategory}
             >
                 <option value="">No Parent Category</option>
-                {categories.length && categories.map(category => (
-                    <option value={category._id}>{category.name}</option>
-                    )) }
+                {categories.length && categories
+                    .filter(category => !category.parent)
+                    .map(category => (
+                        <option key={category._id} value={category._id}>{category.name}</option>
+                    ))}
             </select>
             </div>
             <div className="mb-2">
@@ -212,10 +214,13 @@ function Categories ({swal}) {
                             </td>
                         </tr>
                     )}
-                    {categories.length && categories.map(category => (
-                        <tr>
+                            {categories
+                            // filter out the parent categories
+                            .filter(category => category.parent)
+                            .map(category => (
+                            <tr key={category._id}>
                             <td>{category.name}</td>
-                            <td>{category?.parent?.name}</td>
+                            <td>{category.parent?.name}</td>
                             <td>
                             <button 
                                 onClick={() => editCategory(category)}

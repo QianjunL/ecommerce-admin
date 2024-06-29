@@ -45,9 +45,11 @@ export default function Orders() {
                         {order.paid ? 'YES' : 'NO'}
                     </td>
                     <td>
-                        <span className="bg-gray-200 p-1 rounded-sm">Name: </span>{order.name}, <span className="bg-gray-200 p-1 rounded-sm">Email: </span> {order.email} <br />
-                        <span className="bg-gray-200 p-1 rounded-sm">Address: </span>{order.streetAddress}, <br />
-                        {order.city}, {order.state}, {order.zipCode}, {order.country}
+                    <div>
+                            <strong>Name:</strong> {order.name}, <strong>Email:</strong> {order.email} <br />
+                            <strong>Address:</strong> {order.streetAddress}, 
+                            <span>{order.city}, {order.state}, {order.zipCode}, {order.country}</span>
+                        </div>
 
                     </td>
                     <td>
